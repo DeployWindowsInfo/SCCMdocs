@@ -3,7 +3,9 @@
 title: Plan for software updates | Microsoft Docs
 description: "A plan for the software update point infrastructure is essential before you use software updates in a System Center Configuration Manager production environment."
 keywords:
-author: dougebyms.author: dougebymanager: angrobe
+author: dougeby
+ms.author: dougeby
+manager: angrobe
 ms.date: 01/04/2017
 ms.topic: article
 ms.prod: configuration-manager
@@ -14,7 +16,10 @@ ms.assetid: d071b0ec-e070-40a9-b7d4-564b92a5465f
 
 ---
 
-# Plan for software updates in System Center Configuration Manager*Applies to: System Center Configuration Manager (Current Branch)*
+# Plan for software updates in System Center Configuration Manager
+
+*Applies to: System Center Configuration Manager (Current Branch)*
+
 Before you use software updates in a System Center Configuration Manager production environment, it's important that you go through the planning process. Having a good plan for the software update point infrastructure is key to a successful software updates implementation.
 
 ## Capacity planning recommendations for software updates  
@@ -149,7 +154,9 @@ Enable this option on a device collection or on a set of selected devices. Once 
 ####  <a name="BKMK_WSUSInfrastructure"></a> Use an existing WSUS infrastructure  
  You can use a WSUS server that was active in your environment before you installed Configuration Manager. When the software update point is configured, you must specify the synchronization settings. Configuration Manager connects to the WSUS that runs on the software update point and configures the WSUS server with the same settings. When the WSUS server was previously synchronized with products or classifications that you did not configure as part of the software update point synchronization settings, the software updates metadata for the products and classifications are synchronized for all of the software updates metadata in the WSUS database regardless of the synchronization settings for the software update point. This might result in unexpected software updates metadata in the site database. You will experience the same behavior when you add products or classifications directly in the WSUS Administration console, and then immediately initiate synchronization. Every hour, by default, Configuration Manager connects to the WSUS that runs on the software update point and resets any settings that were modified outside of Configuration Manager.  
 
- The software updates that do not meet the products and classifications that you specify in synchronization settings are set to expired, and then they are removed from the site database.  
+ The software updates that do not meet the products and classifications that you specify in synchronization settings are set to expired, and then they are removed from the site database.
+ 
+ Even if it is possible to share WSUS server for Configuration Manager software update point and standalone use, it is not recommended. It is not possible to to have different WSUS settings such as Products, Classifications, synchronization schedule. Also when an upgrade is removed or declined in WSUS console it will not be possible to use from Configuration Mananger. Consider a design based on one WSUS stand-alone server and one for software update point, or deploy all patches with Configuration Manager software update point.
 
 ####  <a name="BKMK_WSUSAsReplica"></a> Configure WSUS as a replica server  
  When you create a software update point site system role on a primary site server, you cannot use a WSUS server that is configured as a replica. When the WSUS server is configured as a replica, Configuration Manager fails to configure the WSUS server, and the WSUS synchronization fails as well. When a software update point is created on a secondary site, Configuration Manager configures WSUS to be a replica server of the WSUS that runs on the software update point at the parent primary site. The first software update point that you install at a primary site is the default software update point. Additional software update points at the site are configured as replicas of the default software update point.  
